@@ -33,7 +33,7 @@ export async function getTodos(todoId:string): Promise<TodoItem>{
   const res=await docClient.query({
     TableName: todoTable,
     IndexName:index,
-    KeyConditionExpression:'todoId= :todoId',
+    KeyConditionExpression:'todoId = :todoId',
     ExpressionAttributeValues:{ 
       ':todoId': todoId
     }
@@ -41,21 +41,21 @@ export async function getTodos(todoId:string): Promise<TodoItem>{
   if(res.Items.length != 0){
     return res.Items[0] as TodoItem;
   }
-  return null
+  return undefined
 }
 export async function updateTodos(todo:TodoItem): Promise<TodoItem>{
-  await docClient.update({
+  const res=await docClient.update({
     TableName: todoTable,
     Key:{
       userId: todo.userId,
       todoId: todo.todoId
     },
-    UpdateExpression:'set attachmentUrl= :attachmentUrl',
+    UpdateExpression:'set attachmentUrl = :attachmentUrl',
     ExpressionAttributeValues:{ 
       ':attachmentUrl': todo.attachmentUrl
     }
   }).promise();
-  return todo as TodoItem;
+  return res.Attributes as TodoItem;
 }
 function createDynamoDBClient() {
     if (process.env.IS_OFFLINE) {

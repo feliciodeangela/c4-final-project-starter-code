@@ -1,14 +1,9 @@
-//import { TodosAccess } from './todosAcess'
-//import { AttachmentUtils } from './attachmentUtils';
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { getUserId } from '../lambda/utils';
-//import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
-//import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 //import * as createError from 'http-errors'
 import { APIGatewayProxyEvent } from 'aws-lambda';
-
 
 // TODO: Implement businessLogic
 
@@ -17,11 +12,10 @@ export function creatingTodo(todoReq: CreateTodoRequest, event: APIGatewayProxyE
     const todo={
       todoId: idTodo,
       userId: getUserId(event),
-      createdAt: Date(),
-      name: todoReq.name,
-      dueDate: todoReq.dueDate,
+      createdAt:new Date().toISOString(),
       done: false,
-      attachmentUrl: "http://example.com/image.png"
+      attachmentUrl: "https://via.placeholder.com/150C",
+      ...todoReq
     }
     return todo as TodoItem;
 }
