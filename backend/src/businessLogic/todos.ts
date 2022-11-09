@@ -17,7 +17,6 @@ export function createToDo(createTodoRequest: CreateTodoRequest, jwtToken: strin
     const userId = parseUserId(jwtToken);
     const todoId =  uuid.v4();
     const s3BucketName = process.env.ATTACHMENT_S3_BUCKET;
-    
     return toDoAccess.createToDo({
         userId: userId,
         todoId: todoId,
