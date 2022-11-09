@@ -10,8 +10,10 @@ const AWSXRay=require('aws-xray-sdk')
 const XAWS=AWSXRay.captureAWS(AWS);
 export class ToDoAccess {
     constructor(
-        private readonly docClient: DocumentClient = createDynamoDBClient(),
-        private readonly s3Client: Types = new AWS.S3({ signatureVersion: 'v4' }),
+        //private readonly docClient: DocumentClient = createDynamoDBClient(),
+        private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
+        //private readonly s3Client: Types = new AWS.S3({ signatureVersion: 'v4' }),
+        private readonly s3Client: Types = new XAWS.S3({ signatureVersion: 'v4' }),
         private readonly todoTable = process.env.TODOS_TABLE,
         private readonly s3BucketName = process.env.ATTACHMENT_S3_BUCKET) {}
 
@@ -102,14 +104,11 @@ export class ToDoAccess {
         return url as String;
     }
 }
-function createDynamoDBClient() {
-    if (process.env.IS_OFFLINE) {
-      console.log('Creating a Local DynamoDB instance')
-      return new XAWS.DynamoDB.DocumentClient({
-        region: 'localhost',
-        endpoint: 'http://localhost:8000'
-      })
-    }
-  
-    return new XAWS.DynamoDB.DocumentClient()
-}
+// function createDynamoDBClient() {
+//     if (process.env.IS_OFFLINE) {
+//       console.log('Creating a Local DynamoDB instance')
+//       return new XAWS.DynamoDB.DocumentClient({
+//         region: 'localhost',
+//         endpoint: 'http://localhost:8000'
+//       })
+//     }
